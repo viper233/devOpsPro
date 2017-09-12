@@ -1,0 +1,102 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Evolutionary cloudformation template for DevOps study
+
+# Parameters:
+#
+Resources:
+  Vpc:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: '10.1.0.0/16'
+      EnableDnsSupport: false
+      EnableDnsHostnames: false
+      InstanceTenancy: default
+      Tags:
+        -
+          Key: "Name"
+          Value: "stephen-test"
+        -
+          Key: "Owner"
+          Value: "Stephen"
+        -
+          Key: "Client"
+          Value: "DevOps Pro training"
+  InternetGateway:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+        -
+          Key: "Name"
+          Value: "stephen-test"
+        -
+          Key: "Ownwer"
+          Value: "Stephen"
+        -
+          Key: "Client"
+          Value: "DevOps Pro training"
+
+  IGAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref Vpc
+      InternetGatewayId: !Ref InternetGateway
+
+  RouteTable:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref Vpc
+      Tags:
+        -
+          Key: "Name"
+          Value: "stephen-test"
+        -
+          Key: "Ownwer"
+          Value: "Stephen"
+        -
+          Key: "Client"
+          Value: "DevOps Pro training"
+
+  Route:
+    Type: 'AWS::EC2::Route'
+    DependsOn: IGAttachment
+    Properties:
+      RouteTableId: !Ref RouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  SubnetPub1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.1.0.0/24
+      Tags:
+        -
+          Key: "Name"
+          Value: !Join [_, [!Ref 'AWS::StackName', "subpub1"]]
+        -
+          Key: "Ownwer"
+          Value: "Stephen"
+        -
+          Key: "Client"
+          Value: "DevOps Pro training"
+
+  S3Bucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      Tags:
+        -
+          Key: "Name"
+          Value: !Join [_, [!Ref 'AWS::StackName', "bucket1"]]
+        -
+          Key: "Ownwer"
+          Value: "Stephen"
+        -
+          Key: "Client"
+          Value: "DevOps Pro training"
+
+Outputs:
+  VPCId:
+    Value: !Ref Vpc
+  BucketName:
+    Value: !Ref S3Bucket
