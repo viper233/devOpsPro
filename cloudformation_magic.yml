@@ -1,5 +1,6 @@
 ---
 AWSTemplateFormatVersion: "2010-09-09"
+
 Description: Evolutionary cloudformation template for DevOps study
 
 # Parameters:
@@ -22,6 +23,7 @@ Resources:
         -
           Key: "Client"
           Value: "DevOps Pro training"
+
   InternetGateway:
     Type: 'AWS::EC2::InternetGateway'
     Properties:
@@ -74,6 +76,38 @@ Resources:
         -
           Key: "Name"
           Value: !Join [_, [!Ref 'AWS::StackName', "subpub1"]]
+        -
+          Key: "Ownwer"
+          Value: "Stephen"
+        -
+          Key: "Client"
+          Value: "DevOps Pro training"
+
+  SubnetPub2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.1.1.0/24
+      Tags:
+        -
+          Key: "Name"
+          Value: !Join [_, [!Ref 'AWS::StackName', "subpub2"]]
+        -
+          Key: "Ownwer"
+          Value: "Stephen"
+        -
+          Key: "Client"
+          Value: "DevOps Pro training"
+
+  SubnetPub3:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.1.2.0/24
+      Tags:
+        -
+          Key: "Name"
+          Value: !Join [_, [!Ref 'AWS::StackName', "subpub3"]]
         -
           Key: "Ownwer"
           Value: "Stephen"
