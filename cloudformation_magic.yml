@@ -44,7 +44,7 @@ Resources:
       VpcId: !Ref Vpc
       InternetGatewayId: !Ref InternetGateway
 
-  RouteTable:
+  RouteTablePub:
     Type: 'AWS::EC2::RouteTable'
     Properties:
       VpcId: !Ref Vpc
@@ -63,7 +63,7 @@ Resources:
     Type: 'AWS::EC2::Route'
     DependsOn: IGAttachment
     Properties:
-      RouteTableId: !Ref RouteTable
+      RouteTableId: !Ref RouteTablePub
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !Ref InternetGateway
 
@@ -83,6 +83,12 @@ Resources:
           Key: "Client"
           Value: "DevOps Pro training"
 
+  SubnetPub1RouteAssoc:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      RouteTableId: !Ref RouteTablePub
+      SubnetId: !Ref SubnetPub1
+
   SubnetPub2:
     Type: 'AWS::EC2::Subnet'
     Properties:
@@ -99,6 +105,12 @@ Resources:
           Key: "Client"
           Value: "DevOps Pro training"
 
+  SubnetPub2RouteAssoc:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      RouteTableId: !Ref RouteTablePub
+      SubnetId: !Ref SubnetPub2
+
   SubnetPub3:
     Type: 'AWS::EC2::Subnet'
     Properties:
@@ -114,6 +126,12 @@ Resources:
         -
           Key: "Client"
           Value: "DevOps Pro training"
+
+  SubnetPub3RouteAssoc:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      RouteTableId: !Ref RouteTablePub
+      SubnetId: !Ref SubnetPub3
 
   S3Bucket:
     Type: 'AWS::S3::Bucket'
