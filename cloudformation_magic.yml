@@ -3,8 +3,11 @@ AWSTemplateFormatVersion: "2010-09-09"
 
 Description: Evolutionary cloudformation template for DevOps study
 
-# Parameters:
-#
+Parameters:
+  EC2Keypair:
+    Type: String
+    Default: stephen-trinimbus
+
 Resources:
   Vpc:
     Type: 'AWS::EC2::VPC'
@@ -72,6 +75,10 @@ Resources:
     Properties:
       VpcId: !Ref Vpc
       CidrBlock: 10.1.0.0/24
+      AvailabilityZone: !Select
+        - 0
+        - !GetAZs
+          Ref: 'AWS::Region'
       Tags:
         -
           Key: "Name"
@@ -94,6 +101,10 @@ Resources:
     Properties:
       VpcId: !Ref Vpc
       CidrBlock: 10.1.1.0/24
+      AvailabilityZone: !Select
+        - 1
+        - !GetAZs
+          Ref: 'AWS::Region'
       Tags:
         -
           Key: "Name"
@@ -116,6 +127,10 @@ Resources:
     Properties:
       VpcId: !Ref Vpc
       CidrBlock: 10.1.2.0/24
+      AvailabilityZone: !Select
+        - 2
+        - !GetAZs
+          Ref: 'AWS::Region'
       Tags:
         -
           Key: "Name"
@@ -140,6 +155,27 @@ Resources:
         -
           Key: "Name"
           Value: !Join [_, [!Ref 'AWS::StackName', "bucket1"]]
+        -
+          Key: "Ownwer"
+          Value: "Stephen"
+        -
+          Key: "Client"
+          Value: "DevOps Pro training"
+
+  Pinky:
+    Type: 'AWS::EC2::Instance'
+    DependsOn: IGAttachment
+    Properties:
+      #       ImageId: ami-215dbe59 - wrong instance type
+      ImageId: ami-275dbe5f
+      KeyName: !Ref EC2Keypair
+      SubnetId: !Ref SubnetPub1
+      #       SecurityGroupIds:
+      #       SecurityGroups:
+      Tags:
+        -
+          Key: "Name"
+          Value: !Join [_, [!Ref 'AWS::StackName', "test-ec2"]]
         -
           Key: "Ownwer"
           Value: "Stephen"
