@@ -162,6 +162,28 @@ Resources:
           Key: "Client"
           Value: "DevOps Pro training"
 
+  SecurityGroupPub:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupName: !Join [_, [!Ref 'AWS::StackName', "sg-public"]]
+      GroupDescription: "Pub facing security group"
+      VpcId: !Ref Vpc
+      Tags:
+        -
+          Key: "Name"
+          Value: !Join [_, [!Ref 'AWS::StackName', "sg-public"]]
+        -
+          Key: "Ownwer"
+          Value: "Stephen"
+        -
+          Key: "Client"
+          Value: "DevOps Pro training"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 24.80.142.118/32
+
   Pinky:
     Type: 'AWS::EC2::Instance'
     DependsOn: IGAttachment
@@ -169,7 +191,13 @@ Resources:
       #       ImageId: ami-215dbe59 - wrong instance type
       ImageId: ami-275dbe5f
       KeyName: !Ref EC2Keypair
-      SubnetId: !Ref SubnetPub1
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: 0
+          Description: "One bad-ass network interface"
+          SubnetId: !Ref SubnetPub1
+          GroupSet:
+            - Ref: SecurityGroupPub
       #       SecurityGroupIds:
       #       SecurityGroups:
       Tags:
