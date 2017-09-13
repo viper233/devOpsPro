@@ -13,8 +13,8 @@ Resources:
     Type: 'AWS::EC2::VPC'
     Properties:
       CidrBlock: '10.1.0.0/16'
-      EnableDnsSupport: false
-      EnableDnsHostnames: false
+      EnableDnsSupport: True
+      EnableDnsHostnames: True
       InstanceTenancy: default
       Tags:
         -
@@ -183,6 +183,10 @@ Resources:
           FromPort: '22'
           ToPort: '22'
           CidrIp: 24.80.142.118/32
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 199.192.107.198/32
 
   Pinky:
     Type: 'AWS::EC2::Instance'
